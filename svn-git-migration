@@ -1,0 +1,52 @@
+#!/bin/bash
+
+################################################################################
+# Script: migrate_svn_to_git.sh
+# 
+# Description:
+#   Clones an SVN repository and pushes it to a remote Git repository. Intended
+#   to be run regularly (e.g., daily via Task Scheduler on Windows using WSL).
+#
+# Requirements:
+#   - Git with `git-svn` support installed
+#   - Valid authors-transform.txt file located in $DEV_HOME
+#   - Remote Git repository must exist and be accessible
+#
+# Usage:
+#   1. Set the 4 environment variables below.
+#   2. Run the script manually or schedule it to run automatically.
+#
+# Notes:
+#   - This script will *delete and re-push* the `master-backup` branch.
+#   - Make sure your credentials and permissions are correct.
+################################################################################
+
+# === Configuration ===
+# export DEV_HOME=~/dev/                                          # Local dev directory
+# export SVN_PASS=password                                        # Plaintext SVN password (consider using a secure method)
+# export SVN_ADDRESS=http://0.0.0.0/svn/                          # SVN repository URL
+# export GIT_ADDRESS=https://dev.azure.com/org/project/_git/repo  # Git remote URL
+
+# === Debug Output ===
+echo "[INFO] DEV_HOME:       $DEV_HOME"
+echo "[INFO] SVN_ADDRESS:    $SVN_ADDRESS"
+echo "[INFO] GIT_ADDRESS:    $GIT_ADDRESS"
+
+# === Clone from SVN ===
+echo "[INFO] Cloning SVN repo..."
+cd "$DEV_HOME" || exit 1
+echo "$SVN_PASS" | git svn clone --stdlayout --authors-file="$DEV_HOME/authors-transform.txt" "$SVN_ADDRESS"
+
+# === Setup Git Remote ===
+echo "[INFO] Setting up Git remote..."
+cd "$DEV_HOME/auriga" || exit 1
+git remote add origin "$GIT_ADDRESS"
+
+# === Push to Git ===
+echo "[INFO] Deleting old remote branch (if it exists)..."
+git push origin --delete master-backup
+
+echo "[INFO] Pushing to remote branch master-backup..."
+git push -u origin HEAD:master-backup
+
+echo "[SUCCESS] Migration complete."
