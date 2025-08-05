@@ -27,11 +27,6 @@
 # export SVN_ADDRESS=http://10.0.3.7/svn/auriga/       # SVN repository URL
 # export GIT_ADDRESS=https://nwg@dev.azure.com/nwg/Ahead/_git/ahead  # Git remote URL
 
-export DEV_HOME=~/dev/;
-export SVN_PASS=password;
-export SVN_ADDRESS=http://10.0.3.7/svn/auriga/;
-export GIT_ADDRESS=https://nwg@dev.azure.com/nwg/Ahead/_git/ahead;
-
 # === Debug Output ===
 echo "[INFO] DEV_HOME:       $DEV_HOME"
 echo "[INFO] SVN_ADDRESS:    $SVN_ADDRESS"
