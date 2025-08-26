@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ################################################################################
-# Script: migrate_svn_to_git.sh
+# Script: svn-git-migration
 # 
 # Description:
 #   Clones an SVN repository and pushes it to a remote Git repository. Intended
